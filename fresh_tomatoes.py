@@ -1,6 +1,8 @@
-import webbrowser
 import os
 import re
+import webbrowser
+
+import media
 
 # Styles and scripting for the page
 main_page_head = '''
@@ -117,10 +119,10 @@ main_page_content = '''
 </html>
 '''
 
-# A single movie entry html template
+# A single tvshow/movie entry html template
 movie_tile_content = '''
 <div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer">
-    <img src="{poster_image_url}" width="220" height="342">
+    <img src="{poster_image_url}" width="220" height="342" style="cursor:pointer;" title="{tooltip_info}">
     <h2>{movie_title}</h2>
 </div>
 '''
@@ -138,12 +140,25 @@ def create_movie_tiles_content(movies):
         trailer_youtube_id = (youtube_id_match.group(0) if youtube_id_match
                               else None)
 
-        # Append the tile for the movie with its content filled in
+        # Append the tile for the tvshow/movie with its content filled in
         content += movie_tile_content.format(
             movie_title=movie.title,
             poster_image_url=movie.poster_image_url,
-            trailer_youtube_id=trailer_youtube_id
+            trailer_youtube_id=trailer_youtube_id,
+            tooltip_info="{tooltip_info}"
         )
+
+        # Update tooltip depending upon if obj is instance of
+        # tvshow or a movie
+        if isinstance(movie, media.TVShow):
+            content = content.format(
+                tooltip_info="Seasons:" + movie.seasons + ", Episodes:" + movie.episodes + ", Storyline:" + movie.storyline
+            )
+        elif isinstance(movie, media.Movie):
+            content = content.format(
+                tooltip_info="Duration:" + movie.duration + ", Storyline:" + movie.storyline
+            )
+
     return content
 
 
