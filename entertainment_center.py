@@ -60,6 +60,8 @@ ind_day_res = media.Movie("Independence Day: Resurgence",
                           "https://www.youtube.com/watch?v=LbduDRH2m2M",
                           "NOT_YET_KNOWN")
 
+# the list of tv shows and movies
 movies = [got, friends, big_bang_theory, interstellar, gravity, the_martian, lord_of_the_rings, ind_day_res, star_wars]
 
+# Uses list of movie instances as input to generate an HTML file and open it in the browser.
 fresh_tomatoes.open_movies_page(movies)
